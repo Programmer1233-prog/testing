@@ -1,5 +1,8 @@
 from flask_restful import Resource, Api, reqparse
 from flask import request
+import cv2
+
+
 
 api = Api()
 parser = reqparse.RequestParser()
@@ -13,7 +16,11 @@ class FaceDetection(Resource):
 
     def post(self):
         element = parser.parse_args()
-        print(element)
+        path = r'{}'.format(element['images'])
+        print(path)
+        img = cv2.imread(path)
+        filename = 'savedImage.jpg'
+        cv2.imwrite(filename, img)
         return element, 200
 
 api.add_resource(FaceDetection, '/')
