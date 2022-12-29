@@ -1,12 +1,15 @@
 from flask_restful import Resource, Api, reqparse
 from flask import request
-import cv2
+import werkzeug
+from werkzeug.utils import secure_filename
+import os
+
 
 
 
 api = Api()
 parser = reqparse.RequestParser()
-parser.add_argument('images')
+parser.add_argument('images', type=werkzeug.datastructures.FileStorage, location='files')
 
 
 class FaceDetection(Resource):
@@ -16,11 +19,8 @@ class FaceDetection(Resource):
 
     def post(self):
         element = parser.parse_args()
-        path = r'{}'.format(element['images'])
-        print(path)
-        img = cv2.imread(path)
-        filename = 'savedImage.jpg'
-        cv2.imwrite(filename, img)
-        return element, 200
+        image = element["images"]
+        image.save("testing.jpg")
+        return 'hi there', 200
 
 api.add_resource(FaceDetection, '/')
